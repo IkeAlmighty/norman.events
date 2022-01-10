@@ -12,7 +12,7 @@ export default function Home() {
       </Head>
 
       <main className="px-auto">
-        <div className="w-50 mx-auto">
+        <div className="max-w-600px mx-auto">
           <EventCard
             title="Test Event"
             entryFee={5.25}
