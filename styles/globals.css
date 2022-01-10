@@ -20,3 +20,7 @@ footer {
   bottom: 0;
   padding: 5px;
 }
+
+.max-w-600px {
+  max-width: 600px;
+}
