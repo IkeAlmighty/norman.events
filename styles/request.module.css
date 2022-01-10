@@ -1,0 +1,19 @@
+.dropdownAddress {
+  display: block;
+  overflow-x: wrap;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdownAddress :hover {
+  background-color: lightblue;
+}
+
+.autoCompleteContainer {
+  position: absolute;
+  top: 50px;
+  margin: 0;
+  padding: 0;
+  background-color: whitesmoke;
+  width: 100%;
+}
