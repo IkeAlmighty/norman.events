@@ -1,0 +1,39 @@
+.cardContainer {
+  height: 250px;
+  max-width: 600px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.cardImage {
+  width: 100%;
+  max-height: 165px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.smallCardInfo {
+  display: none;
+}
+
+.largeCardInfo {
+  display: inline-block;
+}
+
+@media only screen and (max-width: 600px) {
+  .cardContainer {
+    height: auto;
+  }
+
+  .cardImage {
+    max-height: none;
+  }
+
+  .smallCardInfo {
+    display: inline-block;
+  }
+
+  .largeCardInfo {
+    display: none;
+  }
+}
