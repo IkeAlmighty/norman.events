@@ -2,7 +2,7 @@ import AWS from "aws-sdk";
 import { getSession } from "next-auth/client";
 export default async (req, res) => {
   const session = await getSession({ req });
-  console.log(session.isAdmin);
+
   if (!session.isAdmin) {
     res.status(401).end();
     return;

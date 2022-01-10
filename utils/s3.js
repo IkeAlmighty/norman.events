@@ -1,4 +1,4 @@
-async function fetchImageURL(imageKey) {
+async function fetchImageUrl(imageKey) {
   let res = await fetch(`/api/s3/signedURL?key=${imageKey}`);
   return { url: await res.text() };
 }
@@ -34,4 +34,4 @@ async function deleteImage(imageKey) {
   return await fetch(`/api/s3/deleteObject?key=${imageKey}`);
 }
 
-export { uploadImage, fetchImageURL, listObjectKeys, deleteImage };
+export { uploadImage, fetchImageUrl, listObjectKeys, deleteImage };
