@@ -4,6 +4,7 @@ import S3Upload from "../components/S3Upload";
 import { fetchImageUrl } from "../utils/s3";
 import Script from "next/script";
 import styles from "../styles/request.module.css";
+import { useRouter } from "next/router";
 
 export default function RequestEvent() {
   const [title, setTitle] = useState("");
@@ -12,12 +13,46 @@ export default function RequestEvent() {
   const [imgUrl, setImgUrl] = useState("");
   const [details, setDetails] = useState("");
   const [address, setAddress] = useState("");
-  const [googleMapLink, setGoogleMapLink] = useState("");
+  const [googleMapUrl, setGoogleMapUrl] = useState("");
   const [eventSlug, setEventSlug] = useState("");
 
   const [detailsCharCount, setDetailsCharCount] = useState(0);
 
-  function submitRequest() {}
+  const [errorMessage, setErrorMessage] = useState(undefined);
+
+  const router = useRouter();
+
+  async function submitRequest(e) {
+    e.preventDefault();
+    const eventData = {
+      title,
+      time,
+      entryFee,
+      imgUrl,
+      details,
+      address,
+      googleMapUrl,
+      eventSlug,
+      _id: eventSlug,
+    };
+
+    const keys = Object.keys(eventData);
+    for (let index = 0; index <= keys.length; index++) {
+      if (eventData[keys[index]] === "" && keys[index] !== "details") {
+        setErrorMessage("All fields except 'Details' must be filled out.");
+        return;
+      }
+    }
+
+    let res = await fetch("/api/events/create-request", {
+      method: "POST",
+      body: JSON.stringify({ eventData }),
+    });
+
+    // TODO: let the user know that the request has been sent
+
+    router.push("/");
+  }
 
   async function updateImage(filename) {
     let res = await fetchImageUrl(filename);
@@ -33,7 +68,7 @@ export default function RequestEvent() {
       const places = searchBox.getPlaces();
       if (places.length === 0) return;
       setAddress(places[0].formatted_address);
-      setGoogleMapLink(places[0].url);
+      setGoogleMapUrl(places[0].url);
     });
   }, []);
 
@@ -45,7 +80,7 @@ export default function RequestEvent() {
       />
       <div style={{ maxWidth: "600px" }} className="mx-auto w-100 my-3">
         <h1 className="text-center my-5">Create an Event</h1>
-        <form onSubmit={submitRequest}>
+        <form onSubmit={(e) => submitRequest(e)}>
           <div className="container">
             <div className="mx-1 mb-3 row">
               <label className="col-sm px-0 py-2 w-100">Title</label>
@@ -85,12 +120,12 @@ export default function RequestEvent() {
 
             <div className="mx-1 mb-3 row">
               <label className="col-sm px-0 py-2 w-100">
-                Details ({detailsCharCount}/175)
+                Details ({detailsCharCount}/1000) - Markdown Supported
               </label>
 
               <div className="col-sm px-0 m-0">
                 <textarea
-                  maxLength="175"
+                  maxLength="1000"
                   className="w-100 px-3 py-2"
                   style={{ height: "150px" }}
                   value={details}
@@ -115,10 +150,10 @@ export default function RequestEvent() {
               <label className="col-sm px-0 py-2 w-100">Url Slug</label>
 
               <input
-                className="col-sm"
+                className={`col-sm text-secondary`}
                 type="text"
-                value={eventSlug}
-                onChange={(e) => setEventSlug(e.target.value)}
+                value={"norman.events/" + (eventSlug ? eventSlug : "")}
+                onChange={(e) => setEventSlug(e.target.value.split("/")[1])}
               />
             </div>
 
@@ -130,19 +165,38 @@ export default function RequestEvent() {
               />
             </div>
           </div>
-        </form>
 
-        <h2 className="mt-5 text-center">Preview</h2>
-        <EventCard
-          title={title}
-          time={time}
-          entryFee={entryFee}
-          imgUrl={imgUrl}
-          details={details}
-          googleMapUrl={googleMapLink}
-          eventSlug="/" // this is just a preview, so no need to make the onClick functional
-        />
+          <h2 className="mt-5 text-center">Preview</h2>
+          <EventCard
+            title={title}
+            time={time}
+            entryFee={entryFee}
+            imgUrl={imgUrl}
+            details={details}
+            googleMapUrl={googleMapUrl}
+            eventSlug="/" // this is just a preview, so no need to make the onClick functional
+          />
+          <div className="text-center">
+            <input
+              className="btn btn-primary mt-3"
+              type="submit"
+              value="Submit Request"
+              onClick={submitRequest}
+            />
+          </div>
+        </form>
       </div>
+
+      {errorMessage && (
+        <div className={styles.errorDiv}>
+          <div className={styles.errorContent}>
+            <div className="my-3 text-center">{errorMessage}</div>
+            <div className="my-3 text-center">
+              <button onClick={() => setErrorMessage(undefined)}> Okay </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
