@@ -14,6 +14,7 @@ export default function EventCard({
   }
 
   function prettifyTime() {
+    if (!time) return "Invalid Time";
     const date = new Date(time);
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -22,49 +23,28 @@ export default function EventCard({
   }
 
   return (
-    <a href={`/${eventSlug}`}>
-      <div
-        className={`${styles.cardContainer} mx-auto my-3 py-1 bg-light container`}
-      >
-        <div className={`${styles.smallCardTitle} text-center w-100 mt-2`}>
-          <h4>{title}</h4>
+    <div className={`${styles.cardContainer} p-3 mx-auto`}>
+      <div className="mt-1 text-center">
+        <h3>{title}</h3>
+      </div>
+      <div>
+        <img src={imgUrl} className={styles.cardImage} alt="not loaded" />
+      </div>
+      <div className="mx-auto text-center">
+        <div className="d-inline-block mx-3 mt-3">{prettifyDate()}</div>
+        <div className="d-inline-block mx-3 mt-3">{prettifyTime()}</div>
+        <div className="d-inline-block mx-3 mt-3 border rounded bg-light px-3">
+          {googleMapUrl && <a href={googleMapUrl}>Directions</a>}
         </div>
-        <div className={`${styles.smallCardInfo} row`}>
-          <div className="col-sm">
-            <span className="mx-3">{prettifyDate()}</span>
-            <span className="mx-3">{entryFee ? `$${entryFee}` : "No Fee"}</span>
-            <span className="mx-3">{prettifyTime()}</span>
-          </div>
-        </div>
-        <div className="row my-2">
-          <div className="col-sm text-center my-auto">
-            <img
-              className={`${styles.cardImage} `}
-              src={
-                imgUrl ||
-                "https://lh3.googleusercontent.com/OPYcKKKfd-8ygRSbb10ZvOQWbRTJqIuuwwkEyFIeyMQVpLzsOY9Zjdvc1WQWh3-zzLPaQfDGD8d64RJyzbhOTkS2g1xgRy7wC1yKs5ox7aE84LE6gpw_-SSxyWtf8E9fJmF_Zlw"
-              }
-              alt="promotional picture"
-            />
-          </div>
-
-          <div className="col-sm">
-            <div className="row">
-              <div className="col-sm">
-                <p className="text-left my-3 overflow-hidden">{details}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className={`${styles.largeCardInfo} row`}>
-          <div className="col-sm">
-            <span className="mx-3">{prettifyDate()}</span>
-            <span className="mx-3">{entryFee ? `$${entryFee}` : "No Fee"}</span>
-            <span className="mx-3">{prettifyTime()}</span>
-          </div>
+        <div className="d-inline-block mx-3 mt-3">
+          {entryFee ? `$${entryFee}` : "No Fee"}
         </div>
       </div>
-    </a>
+      <div className={`mt-3 mx-auto text-center`}>
+        <a href={`/${eventSlug}`}>
+          <button className="rounded bg-light">More Info</button>
+        </a>
+      </div>
+    </div>
   );
 }
