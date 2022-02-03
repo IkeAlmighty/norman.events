@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchImageURL } from "../utils/s3";
+import { fetchImageUrl } from "../utils/s3";
 export default function S3Image({ imageKey, alt, className }) {
   const [url, setURL] = useState(undefined);
 
   useEffect(async () => {
     if (!imageKey) return;
-    const { url } = await fetchImageURL(imageKey);
+    const { url } = await fetchImageUrl(imageKey);
     setURL(url);
   }, [imageKey]);
 
