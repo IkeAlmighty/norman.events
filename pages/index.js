@@ -1,8 +1,10 @@
+import clientPromise from "../utils/mongodb";
+
 import Head from "next/head";
 import EventCard from "../components/EventCard";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/index.module.css";
 
-export default function Home() {
+export default function Index({ events }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -25,42 +27,35 @@ export default function Home() {
           </nav>
         </div>
         <div className="max-w-600px mx-auto">
-          <EventCard
-            title="Test Event"
-            entryFee={5.25}
-            imgUrl="https://discovery.sndimg.com/content/dam/images/discovery/fullset/2021/4/30/GettyImages-1189192456.jpg.rend.hgtvcom.406.406.suffix/1619849704543.jpeg"
-            details="This is a test event"
-            eventSlug="testSlug"
-            googleMapUrl={
-              "https://www.google.com/maps?q=norman+ok&um=1&ie=UTF-8&sa=X&ved=2ahUKEwjByPeOs6j1AhXWk2oFHTxGBKcQ_AUoAXoECAIQAw"
-            }
-          />
-
-          <EventCard
-            title="Test Event"
-            entryFee={5.25}
-            imgUrl="https://discovery.sndimg.com/content/dam/images/discovery/fullset/2021/4/30/GettyImages-1189192456.jpg.rend.hgtvcom.406.406.suffix/1619849704543.jpeg"
-            details="This is a test event"
-            eventSlug="testSlug"
-            googleMapUrl={
-              "https://www.google.com/maps?q=norman+ok&um=1&ie=UTF-8&sa=X&ved=2ahUKEwjByPeOs6j1AhXWk2oFHTxGBKcQ_AUoAXoECAIQAw"
-            }
-          />
-
-          <EventCard
-            title="Test Event"
-            entryFee={5.25}
-            imgUrl="https://discovery.sndimg.com/content/dam/images/discovery/fullset/2021/4/30/GettyImages-1189192456.jpg.rend.hgtvcom.406.406.suffix/1619849704543.jpeg"
-            details="This is a test event"
-            eventSlug="testSlug"
-            googleMapUrl={
-              "https://www.google.com/maps?q=norman+ok&um=1&ie=UTF-8&sa=X&ved=2ahUKEwjByPeOs6j1AhXWk2oFHTxGBKcQ_AUoAXoECAIQAw"
-            }
-          />
+          {events?.map((event) => (
+            <EventCard
+              title={event.title}
+              time={event.time}
+              entryFee={event.entryFee}
+              imgUrl={event.imgUrl}
+              details={event.details}
+              googleMapUrl={event.googleMapUrl}
+              eventSlug={event.eventSlug}
+            />
+          ))}
         </div>
       </main>
 
       <footer></footer>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const client = await clientPromise;
+
+  const events = await client
+    .db()
+    .collection("events")
+    .find({ time: { $gt: Date.now() } })
+    .toArray();
+
+  // .sort((previousEvent, nextEvent) => previousEvent.time - nextEvent.time);
+
+  return { props: { events } };
 }

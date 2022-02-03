@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import EventCard from "../components/EventCard";
 import S3Upload from "../components/S3Upload";
-import { fetchImageUrl } from "../utils/s3";
 import Script from "next/script";
 import styles from "../styles/request.module.css";
 import { useRouter } from "next/router";
@@ -10,7 +9,7 @@ export default function RequestEvent() {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
   const [entryFee, setEntryFee] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
+  const [imgKey, setImgKey] = useState("");
   const [details, setDetails] = useState("");
   const [address, setAddress] = useState("");
   const [googleMapUrl, setGoogleMapUrl] = useState("");
@@ -24,11 +23,13 @@ export default function RequestEvent() {
 
   async function submitRequest(e) {
     e.preventDefault();
+    //FIXME: the directions button does not work if it is place instead of an address
+    // make the address always an address
     const eventData = {
       title,
-      time,
-      entryFee,
-      imgUrl,
+      time: new Date(time).getTime(), // for faster querying in other parts of the app, time since epoch is stored
+      entryFee: parseInt(entryFee),
+      imgKey,
       details,
       address,
       googleMapUrl,
@@ -52,11 +53,6 @@ export default function RequestEvent() {
     // TODO: let the user know that the request has been sent
 
     router.push("/");
-  }
-
-  async function updateImage(filename) {
-    let res = await fetchImageUrl(filename);
-    setImgUrl(res.url);
   }
 
   const addressInputBox = useRef();
@@ -160,7 +156,7 @@ export default function RequestEvent() {
             <div className="mx-1 mb-3 row">
               <S3Upload
                 label="Upload Image"
-                onUpload={async (filename) => updateImage(filename)}
+                onUpload={async (filename) => setImgKey(filename)}
                 className="mx-0"
               />
             </div>
@@ -171,7 +167,7 @@ export default function RequestEvent() {
             title={title}
             time={time}
             entryFee={entryFee}
-            imgUrl={imgUrl}
+            imgKey={imgKey}
             details={details}
             googleMapUrl={googleMapUrl}
             eventSlug="/" // this is just a preview, so no need to make the onClick functional
