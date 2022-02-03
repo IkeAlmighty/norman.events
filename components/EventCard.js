@@ -1,14 +1,18 @@
+import { useState } from "react";
 import styles from "./EventCard.module.css";
+import S3Image from "./S3Image";
 
 export default function EventCard({
   title,
   time,
   entryFee,
-  imgUrl,
+  imgKey,
   details,
   googleMapUrl,
   eventSlug,
 }) {
+  const [infoToggle, setInfoToggle] = useState(false);
+
   function prettifyDate() {
     return new Date(time).toLocaleDateString();
   }
@@ -28,7 +32,7 @@ export default function EventCard({
         <h3>{title}</h3>
       </div>
       <div>
-        <img src={imgUrl} className={styles.cardImage} alt="not loaded" />
+        <S3Image imageKey={imgKey} />
       </div>
       <div className="mx-auto text-center">
         <div className="d-inline-block mx-3 mt-3">{prettifyDate()}</div>
@@ -37,12 +41,21 @@ export default function EventCard({
           {googleMapUrl && <a href={googleMapUrl}>Directions</a>}
         </div>
         <div className="d-inline-block mx-3 mt-3">
-          {entryFee ? `$${entryFee}` : "No Fee"}
+          {entryFee && parseInt(entryFee) > 0 ? `$${entryFee}` : "No Fee"}
         </div>
       </div>
-      <div className={`mt-3 mx-auto text-center`}>
-        <a href={`/${eventSlug}`}>
-          <button className="rounded bg-light">More Info</button>
+      <div className={`mt-3 mx-auto`}>
+        {infoToggle && <div className="mb-3">{details}</div>}
+
+        <button
+          onClick={() => setInfoToggle(!infoToggle)}
+          className="rounded bg-light p-2"
+        >
+          {infoToggle === false ? "More Info" : "Less Info"}
+        </button>
+
+        <a className="mx-3" href={`/${eventSlug}`}>
+          <u>Event Store</u>
         </a>
       </div>
     </div>
