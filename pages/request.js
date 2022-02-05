@@ -4,8 +4,9 @@ import S3Upload from "../components/S3Upload";
 import Script from "next/script";
 import styles from "../styles/request.module.css";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
 
-export default function RequestEvent() {
+export default function RequestEvent({ session }) {
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
   const [entryFee, setEntryFee] = useState("");
@@ -52,7 +53,11 @@ export default function RequestEvent() {
 
     // TODO: let the user know that the request has been sent
 
-    router.push("/");
+    if (session.isAdmin) {
+      router.push("/admin");
+    } else {
+      router.push("/");
+    }
   }
 
   const addressInputBox = useRef();
@@ -195,4 +200,9 @@ export default function RequestEvent() {
       )}
     </main>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  return { props: { session } };
 }
