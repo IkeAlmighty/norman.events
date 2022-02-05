@@ -54,9 +54,9 @@ export default function EventCard({
           {infoToggle === false ? "More Info" : "Less Info"}
         </button>
 
-        <a className="mx-3" href={`/${eventSlug}`}>
+        {/* <a className="mx-3" href={`/${eventSlug}`}>
           <u>Event Store</u>
-        </a>
+        </a> */}
       </div>
     </div>
   );
