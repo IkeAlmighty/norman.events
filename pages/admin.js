@@ -91,7 +91,7 @@ export default function Admin({ session }) {
               title={draft.title}
               time={draft.time}
               entryFee={draft.entryFee}
-              imgUrl={draft.imgUrl}
+              imgKey={draft.imgKey}
               details={draft.details}
               googleMapUrl={draft.googleMapUrl}
               eventSlug={draft.eventSlug}

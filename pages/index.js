@@ -32,7 +32,7 @@ export default function Index({ events }) {
               title={event.title}
               time={event.time}
               entryFee={event.entryFee}
-              imgUrl={event.imgUrl}
+              imgKey={event.imgKey}
               details={event.details}
               googleMapUrl={event.googleMapUrl}
               eventSlug={event.eventSlug}
