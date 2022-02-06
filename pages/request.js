@@ -53,7 +53,7 @@ export default function RequestEvent({ session }) {
 
     // TODO: let the user know that the request has been sent
 
-    if (session.isAdmin) {
+    if (session?.isAdmin) {
       router.push("/admin");
     } else {
       router.push("/");
