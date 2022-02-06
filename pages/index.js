@@ -18,7 +18,7 @@ export default function Index({ events }) {
           <nav className="container max-w-600px">
             <ul className="list-unstyled row">
               <li className="text-center d-inline-block border border-dark rounded p-2 bg-light col">
-                <a href="/request">Request and Event</a>
+                <a href="/request">Request an Event</a>
               </li>
               <li className="text-center d-inline-block p-2 col">
                 Norman Events
@@ -29,6 +29,7 @@ export default function Index({ events }) {
         <div className="max-w-600px mx-auto">
           {events?.map((event) => (
             <EventCard
+              key={eventSlug}
               title={event.title}
               time={event.time}
               entryFee={event.entryFee}
