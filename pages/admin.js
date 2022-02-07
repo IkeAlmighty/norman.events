@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import EventCard from "../components/EventCard";
 import clientPromise from "../utils/mongodb";
 import styles from "../styles/admin.module.css";
@@ -71,19 +71,27 @@ export default function Admin({ session }) {
 
   return (
     <>
-      <h1 className="p-3">Hi {session.user.name.split(" ")[0]} :)</h1>
+      <div className="d-inline-block w-50">
+        <h1 className="p-3">Hi {session.user.name.split(" ")[0]} :)</h1>
 
-      <button
-        className="mx-3"
-        onClick={() => setToggleApproved(!toggleApproved)}
-      >
-        {toggleApproved ? "Manage Requests" : "Manage Live Events"}
-      </button>
-      {!toggleApproved && (
-        <span className="px-3">
-          There are {events?.length} event requests to approve.
-        </span>
-      )}
+        <button
+          className="mx-3"
+          onClick={() => setToggleApproved(!toggleApproved)}
+        >
+          {toggleApproved ? "Manage Requests" : "Manage Live Events"}
+        </button>
+        {!toggleApproved && (
+          <span className="px-3">
+            There are {events?.length} event requests to approve.
+          </span>
+        )}
+      </div>
+      <div className="d-inline-block w-50">
+        <button className="float-end" onClick={signOut}>
+          Sign Out
+        </button>
+      </div>
+
       {events?.map((draft) => {
         return (
           <div key={draft._id} className="border py-3">
