@@ -71,25 +71,32 @@ export default function Admin({ session }) {
 
   return (
     <>
-      <div className="d-inline-block w-50">
+      <div className="container">
         <h1 className="p-3">Hi {session.user.name.split(" ")[0]} :)</h1>
-
-        <button
-          className="mx-3"
-          onClick={() => setToggleApproved(!toggleApproved)}
-        >
-          {toggleApproved ? "Manage Requests" : "Manage Live Events"}
-        </button>
-        {!toggleApproved && (
-          <span className="px-3">
-            There are {events?.length} event requests to approve.
-          </span>
-        )}
-      </div>
-      <div className="d-inline-block w-50">
-        <button className="float-end" onClick={signOut}>
-          Sign Out
-        </button>
+        <div className="row">
+          <div className="col-8">
+            <button
+              className="mx-3"
+              onClick={() => setToggleApproved(!toggleApproved)}
+            >
+              {toggleApproved ? "Manage Requests" : "Manage Live Events"}
+            </button>
+          </div>
+          <div className="col-4">
+            <button className="float-end" onClick={signOut}>
+              Sign Out
+            </button>
+          </div>
+        </div>
+        <div className="row my-3">
+          <div className="col-sm">
+            {!toggleApproved && (
+              <div className="px-3">
+                There are {events?.length} event requests to approve.
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {events?.map((draft) => {
