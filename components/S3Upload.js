@@ -1,13 +1,16 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { uploadImage } from "../utils/s3";
 
 export default function S3Upload({ label, onUpload, className, style }) {
+  const [imageUploading, setImageUploading] = useState(false);
+
   const fileupload = useRef(null);
   return (
     <>
       {/* Because it's hard to style file inputs, we use a button input
       as a proxy and hide the actual file input: */}
       <input
+        disabled={imageUploading}
         className={className}
         style={
           style && !className
@@ -15,8 +18,15 @@ export default function S3Upload({ label, onUpload, className, style }) {
             : { display: "block", margin: "auto auto", margin: "10px" }
         }
         type="button"
-        value={label ? label : "Upload Image"}
+        value={
+          label
+            ? imageUploading
+              ? "Uploading Image..."
+              : label
+            : "Upload Image"
+        }
         onClick={() => {
+          setImageUploading(true);
           fileupload.current.click();
         }}
       />
@@ -27,6 +37,7 @@ export default function S3Upload({ label, onUpload, className, style }) {
         accept="image/png, image/jpeg"
         onChange={async (e) => {
           let res = await uploadImage(e);
+          setImageUploading(false);
           if (res.ok) {
             onUpload(e.target.value.split("\\").pop());
           }
