@@ -47,13 +47,15 @@ export default function EventCard({
       <div className={`mt-3 mx-auto`}>
         {infoToggle && <div className="mb-3">{details}</div>}
 
-        <button
-          onClick={() => setInfoToggle(!infoToggle)}
-          type="button"
-          className="rounded bg-light p-2"
-        >
-          {infoToggle === false ? "More Info" : "Less Info"}
-        </button>
+        {details && (
+          <button
+            onClick={() => setInfoToggle(!infoToggle)}
+            type="button"
+            className="rounded bg-light p-2"
+          >
+            {infoToggle === false ? "More Info" : "Less Info"}
+          </button>
+        )}
 
         {/* <a className="mx-3" href={`/${eventSlug}`}>
           <u>Event Store</u>
