@@ -49,6 +49,7 @@ export default function EventCard({
 
         <button
           onClick={() => setInfoToggle(!infoToggle)}
+          type="button"
           className="rounded bg-light p-2"
         >
           {infoToggle === false ? "More Info" : "Less Info"}
