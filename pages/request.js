@@ -24,7 +24,7 @@ export default function RequestEvent({ session }) {
 
   async function submitRequest(e) {
     e.preventDefault();
-    //FIXME: the directions button does not work if it is place instead of an address
+    // FIXME: the directions button does not work if it is place instead of an address
     // make the address always an address
     const eventData = {
       title,
@@ -38,6 +38,7 @@ export default function RequestEvent({ session }) {
       _id: eventSlug,
     };
 
+    // show an error message if the eventData or details fields are not filled out
     const keys = Object.keys(eventData);
     for (let index = 0; index <= keys.length; index++) {
       if (eventData[keys[index]] === "" && keys[index] !== "details") {
@@ -46,6 +47,7 @@ export default function RequestEvent({ session }) {
       }
     }
 
+    // submit the request to the backend
     let res = await fetch("/api/events/create-request", {
       method: "POST",
       body: JSON.stringify({ eventData }),
@@ -158,6 +160,7 @@ export default function RequestEvent({ session }) {
               />
             </div>
 
+            {/* image upload button */}
             <div className="mx-1 mb-3 row">
               <S3Upload
                 label="Upload Image"
