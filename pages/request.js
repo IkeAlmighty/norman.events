@@ -6,21 +6,38 @@ import styles from "../styles/request.module.css";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 
-export default function RequestEvent({ session }) {
-  const [title, setTitle] = useState("");
+export default function RequestEvent({ session, event }) {
+  const [title, setTitle] = useState(event?.title || "");
+
+  // TODO: once getNullOrDateTIme is working, use it to initialize
   const [time, setTime] = useState("");
-  const [entryFee, setEntryFee] = useState("");
-  const [imgKey, setImgKey] = useState("");
-  const [details, setDetails] = useState("");
-  const [address, setAddress] = useState("");
-  const [googleMapUrl, setGoogleMapUrl] = useState("");
-  const [eventSlug, setEventSlug] = useState("");
+  const [entryFee, setEntryFee] = useState(event?.entryFee || "");
+  const [imgKey, setImgKey] = useState(event?.imgKey || "");
+  const [details, setDetails] = useState(event?.details || "");
+  const [address, setAddress] = useState(event?.address || "");
+  const [googleMapUrl, setGoogleMapUrl] = useState(event?.googleMapUrl || "");
+  const [eventSlug, setEventSlug] = useState(event?.eventSlug || "");
 
   const [detailsCharCount, setDetailsCharCount] = useState(0);
 
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const router = useRouter();
+
+  // helper function for formatting the datetime input field with prefilled data:
+  function getNullOrDateTime() {
+    // this function is only used when there is prefilled data, so check to see if 'event.time' exists:
+    if (!event || !event.time) return undefined;
+
+    // FIXME: For some reason this creates an invalid date, fix it so that it creates a valid date
+    const date = new Date(event.time);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    const year = date.getFullYear();
+    console.log("date:", date.toLocaleDateString());
+
+    return `${year}-${month}-${day}`;
+  }
 
   async function submitRequest(e) {
     e.preventDefault();
@@ -47,8 +64,13 @@ export default function RequestEvent({ session }) {
       }
     }
 
+    // Edit the event if event data was provided when the page loaded:
+    const endpoint = event
+      ? "/api/events/edit-request"
+      : "/api/events/create-request";
+
     // submit the request to the backend
-    let res = await fetch("/api/events/create-request", {
+    let res = await fetch(endpoint, {
       method: "POST",
       body: JSON.stringify({ eventData }),
     });
@@ -77,6 +99,7 @@ export default function RequestEvent({ session }) {
 
   return (
     <main className="px-auto">
+      {/* FIXME: move this script to the index page so it is still loaded on router.push to this page */}
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY}&libraries=places`}
         strategy="beforeInteractive"
@@ -207,5 +230,7 @@ export default function RequestEvent({ session }) {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  return { props: { session } };
+  const event = context.query;
+
+  return { props: { session, event } };
 }
