@@ -57,6 +57,17 @@ export default function Admin({ session }) {
     );
   }
 
+  async function unpublishEvent(_id) {
+    // update ui:
+    setEvents(events.filter((val) => val._id !== _id));
+
+    // move the event from the published to draft collection:
+    let res = await fetch("/api/events/unpublish-event", {
+      method: "POST",
+      body: JSON.stringify({ _id }),
+    });
+  }
+
   async function declineDraft(_id) {
     // update ui:
     setEvents(events.filter((val) => val._id !== _id));
@@ -147,7 +158,12 @@ export default function Admin({ session }) {
 
               {toggleApproved && (
                 <div>
-                  <button className={styles.btn}>Edit</button>
+                  <button
+                    className={styles.btn}
+                    onClick={() => unpublishEvent(draft._id)}
+                  >
+                    Unpub
+                  </button>
                   <button
                     className={styles.btn}
                     onClick={() => deleteEvent(draft._id)}
