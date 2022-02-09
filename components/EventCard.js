@@ -40,16 +40,6 @@ export default function EventCard({
       <div>
         <S3Image imageKey={imgKey} />
       </div>
-      <div className="mx-auto text-center">
-        <div className="d-inline-block mx-3 mt-3">{prettifyDate()}</div>
-        <div className="d-inline-block mx-3 mt-3">{prettifyTime()}</div>
-        <div className="d-inline-block mx-3 mt-3 border rounded bg-light px-3">
-          {googleMapUrl && <a href={googleMapUrl}>Directions</a>}
-        </div>
-        <div className="d-inline-block mx-3 mt-3">
-          {entryFee && parseInt(entryFee) > 0 ? `$${entryFee}` : "No Fee"}
-        </div>
-      </div>
       <div className={`mt-3 mx-auto`}>
         {/* FIXME: This could expose the site to Cross Site Scripting attacks */}
         {infoToggle && (
@@ -60,18 +50,30 @@ export default function EventCard({
         )}
 
         {details && (
-          <button
-            onClick={() => setInfoToggle(!infoToggle)}
-            type="button"
-            className="rounded bg-light p-2"
-          >
-            {infoToggle === false ? "More Info" : "Less Info"}
-          </button>
+          <div className="text-center">
+            <a
+              onClick={() => setInfoToggle(!infoToggle)}
+              type="a"
+              className="rounded bg-light px-2"
+            >
+              {infoToggle === false ? "..." : "Less"}
+            </a>
+          </div>
         )}
 
         {/* <a className="mx-3" href={`/${eventSlug}`}>
           <u>Event Store</u>
         </a> */}
+      </div>
+      <div className="mx-auto text-center">
+        <div className="d-inline-block mx-3 mt-3">{prettifyDate()}</div>
+        <div className="d-inline-block mx-3 mt-3">{prettifyTime()}</div>
+        <div className="d-inline-block mx-3 mt-3 border rounded bg-light px-3">
+          {googleMapUrl && <a href={googleMapUrl}>Directions</a>}
+        </div>
+        <div className="d-inline-block mx-3 mt-3">
+          {entryFee && parseInt(entryFee) > 0 ? `$${entryFee}` : "No Fee"}
+        </div>
       </div>
     </div>
   );
