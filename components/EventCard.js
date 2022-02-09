@@ -53,7 +53,7 @@ export default function EventCard({
           <div className="text-center">
             <a
               onClick={() => setInfoToggle(!infoToggle)}
-              type="a"
+              role="button"
               className="rounded bg-light px-2"
             >
               {infoToggle === false ? "..." : "Less"}
