@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./EventCard.module.css";
 import S3Image from "./S3Image";
+import { marked } from "marked";
 
 export default function EventCard({
   title,
@@ -26,6 +27,10 @@ export default function EventCard({
     return `${hours % 12}:${minutes}${pmAm}`;
   }
 
+  function getDetailsMarkup() {
+    return { __html: marked(details) };
+  }
+
   return (
     <div className={`${styles.cardContainer} p-3 mx-auto`}>
       <div className="mt-1 text-center">
@@ -45,7 +50,13 @@ export default function EventCard({
         </div>
       </div>
       <div className={`mt-3 mx-auto`}>
-        {infoToggle && <div className="mb-3">{details}</div>}
+        {/* FIXME: This could expose the site to Cross Site Scripting attacks */}
+        {infoToggle && (
+          <div
+            className={`mb-3 ${styles.detailsMarkup}`}
+            dangerouslySetInnerHTML={getDetailsMarkup()}
+          />
+        )}
 
         {details && (
           <button
