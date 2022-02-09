@@ -47,6 +47,16 @@ export default function Admin({ session }) {
     }
   }
 
+  function editDraft(draft) {
+    // redirects the user to the request page, passing queries to the url to prefill the form.
+    const { title, time, entryFee, imgKey, details, googleMapUrl, eventSlug } =
+      draft;
+
+    router.push(
+      `/request?title=${title}&time=${time}&entryFee=${entryFee}&imgKey=${imgKey}&details=${details}&googleMapUrl=${googleMapUrl}&eventSlug=${eventSlug}`
+    );
+  }
+
   async function declineDraft(_id) {
     // update ui:
     setEvents(events.filter((val) => val._id !== _id));
@@ -120,7 +130,12 @@ export default function Admin({ session }) {
                   >
                     Approve
                   </button>
-                  <button className={`${styles.btn}`}>Edit</button>
+                  <button
+                    className={`${styles.btn}`}
+                    onClick={() => editDraft(draft)}
+                  >
+                    Edit
+                  </button>
                   <button
                     className={`${styles.btn} ${styles.btnDeny}`}
                     onClick={() => declineDraft(draft._id)}
