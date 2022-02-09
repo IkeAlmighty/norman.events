@@ -2,7 +2,6 @@ import clientPromise from "../../../utils/mongodb";
 
 export default async (req, res) => {
   const { _id } = JSON.parse(req.body);
-  console.log(_id);
   const client = await clientPromise;
 
   let mongores = await client
