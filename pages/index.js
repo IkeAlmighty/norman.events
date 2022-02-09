@@ -29,7 +29,7 @@ export default function Index({ events }) {
         <div className="max-w-600px mx-auto">
           {events?.map((event) => (
             <EventCard
-              key={eventSlug}
+              key={event.eventSlug}
               title={event.title}
               time={event.time}
               entryFee={event.entryFee}
