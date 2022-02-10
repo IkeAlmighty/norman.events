@@ -76,6 +76,12 @@ export default function RequestEvent({ session, event }) {
       body: JSON.stringify({ eventData }),
     });
 
+    // send server errors to error message and return if error happens:
+    if ((await res.status) >= 400) {
+      setErrorMessage(await res.text());
+      return;
+    }
+
     // TODO: let the user know that the request has been sent
 
     if (session?.user?.isAdmin) {
