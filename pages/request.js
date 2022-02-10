@@ -40,7 +40,7 @@ export default function RequestEvent({ session, event }) {
   }
 
   async function submitRequest(e) {
-    e.preventDefault();
+    e?.preventDefault();
     // FIXME: the directions button does not work if it is place instead of an address
     // make the address always an address
     const eventData = {
@@ -65,7 +65,8 @@ export default function RequestEvent({ session, event }) {
     }
 
     // Edit the event if event data was provided when the page loaded:
-    const endpoint = event
+    const eventDataExists = JSON.stringify(event) !== JSON.stringify({});
+    const endpoint = eventDataExists
       ? "/api/events/edit-request"
       : "/api/events/create-request";
 
@@ -77,7 +78,7 @@ export default function RequestEvent({ session, event }) {
 
     // TODO: let the user know that the request has been sent
 
-    if (session?.isAdmin) {
+    if (session?.user?.isAdmin) {
       router.push("/admin");
     } else {
       router.push("/");
@@ -208,7 +209,7 @@ export default function RequestEvent({ session, event }) {
               className="btn btn-primary mt-3"
               type="submit"
               value="Submit Request"
-              onClick={submitRequest}
+              onClick={() => submitRequest()}
             />
           </div>
         </form>
