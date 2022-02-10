@@ -146,6 +146,7 @@ export default function RequestEvent({ session, event }) {
               <input
                 className="col-sm"
                 type="number"
+                step=".01"
                 value={entryFee}
                 onChange={(e) => setEntryFee(e.target.value)}
               />

@@ -72,7 +72,9 @@ export default function EventCard({
           {googleMapUrl && <a href={googleMapUrl}>Directions</a>}
         </div>
         <div className="d-inline-block mx-3 mt-3">
-          {entryFee && parseInt(entryFee) > 0 ? `$${entryFee}` : "No Fee"}
+          {entryFee && parseInt(entryFee) > 0
+            ? `$${parseFloat(entryFee).toFixed(2)}`
+            : "No Fee"}
         </div>
       </div>
     </div>
