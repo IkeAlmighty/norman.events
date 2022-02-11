@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./EventCard.module.css";
 import S3Image from "./S3Image";
 import { marked } from "marked";
+import { prettifyDate, prettifyTime } from "../utils/datetime";
 
 export default function EventCard({
   title,
@@ -14,20 +15,6 @@ export default function EventCard({
 }) {
   const [infoToggle, setInfoToggle] = useState(false);
 
-  function prettifyDate() {
-    return new Date(time).toLocaleDateString();
-  }
-
-  function prettifyTime() {
-    if (!time) return "Invalid Time";
-    const date = new Date(time);
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    if (minutes < 10) minutes = `0${minutes}`; // add leading 0 if it is missing!
-    let pmAm = hours > 12 ? "pm" : "am";
-    return `${hours % 12}:${minutes}${pmAm}`;
-  }
-
   function getDetailsMarkup() {
     return { __html: marked(details) };
   }
@@ -35,7 +22,9 @@ export default function EventCard({
   return (
     <div className={`${styles.cardContainer} p-3 mx-auto`}>
       <div className="mt-1 text-center">
-        <h3>{title}</h3>
+        <a href={`/${eventSlug}`}>
+          <h3>{title}</h3>
+        </a>
       </div>
       <div>
         <S3Image imageKey={imgKey} />
@@ -62,12 +51,12 @@ export default function EventCard({
         )}
 
         {/* <a className="mx-3" href={`/${eventSlug}`}>
-          <u>Event Store</u>
+          <u>Go To Event Page</u>
         </a> */}
       </div>
       <div className="mx-auto text-center">
-        <div className="d-inline-block mx-3 mt-3">{prettifyDate()}</div>
-        <div className="d-inline-block mx-3 mt-3">{prettifyTime()}</div>
+        <div className="d-inline-block mx-3 mt-3">{prettifyDate(time)}</div>
+        <div className="d-inline-block mx-3 mt-3">{prettifyTime(time)}</div>
         <div className="d-inline-block mx-3 mt-3 border rounded bg-light px-3">
           {googleMapUrl && <a href={googleMapUrl}>Directions</a>}
         </div>
