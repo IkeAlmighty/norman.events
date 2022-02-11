@@ -56,7 +56,9 @@ export async function getServerSideProps(context) {
     .find({ time: { $gt: Date.now() } })
     .toArray();
 
-  // .sort((previousEvent, nextEvent) => previousEvent.time - nextEvent.time);
+  const sorted = events.sort(
+    (previousEvent, nextEvent) => previousEvent.time - nextEvent.time
+  );
 
-  return { props: { events } };
+  return { props: { events: sorted } };
 }
