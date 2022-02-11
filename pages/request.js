@@ -17,6 +17,10 @@ export default function RequestEvent({ session, event }) {
   const [address, setAddress] = useState(event?.address || "");
   const [googleMapUrl, setGoogleMapUrl] = useState(event?.googleMapUrl || "");
   const [eventSlug, setEventSlug] = useState(event?.eventSlug || "");
+  const [contactEmail, setContactEmail] = useState(event?.contactEmail || "");
+  const [showContactEmail, setShowContactEmail] = useState(
+    event?.showContactEmail || false
+  );
 
   const [detailsCharCount, setDetailsCharCount] = useState(0);
 
@@ -41,8 +45,6 @@ export default function RequestEvent({ session, event }) {
 
   async function submitRequest(e) {
     e?.preventDefault();
-    // FIXME: the directions button does not work if it is place instead of an address
-    // make the address always an address
     const eventData = {
       title,
       time: new Date(time).getTime(), // for faster querying in other parts of the app, time since epoch is stored
@@ -52,6 +54,8 @@ export default function RequestEvent({ session, event }) {
       address,
       googleMapUrl,
       eventSlug,
+      contactEmail,
+      showContactEmail,
       _id: eventSlug,
     };
 
@@ -189,6 +193,26 @@ export default function RequestEvent({ session, event }) {
                 value={"norman.events/" + (eventSlug ? eventSlug : "")}
                 onChange={(e) => setEventSlug(e.target.value.split("/")[1])}
               />
+            </div>
+
+            <div className="mx-1 mb-3 row">
+              <label className="col-sm px-0 py-2 w-100">Contact Email</label>
+
+              <input
+                className="col-sm"
+                type="email"
+                onChange={(e) => setContactEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="mx-1 mb-3">
+              <input
+                type="checkbox"
+                onChange={(e) => setShowContactEmail(e.target.value)}
+              />
+              <label className="mx-2 px-0 py-2">
+                Publicly show contact email
+              </label>
             </div>
 
             {/* image upload button */}

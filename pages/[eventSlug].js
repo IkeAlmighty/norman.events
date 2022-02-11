@@ -11,6 +11,8 @@ export default function EventSlug({
   details,
   entryFee,
   time,
+  contactEmail,
+  showContactEmail,
 }) {
   function createMarkup() {
     return { __html: marked(details || "") };
@@ -35,6 +37,12 @@ export default function EventSlug({
           <a href={googleMapUrl}>Directions</a>
         </u>
       </div>
+      {contactEmail && showContactEmail && (
+        <div className="my-3">
+          Contact <a href={`mailto:${contactEmail}`}>{contactEmail}</a> with
+          questions regarding the event.
+        </div>
+      )}
     </div>
   );
 }
