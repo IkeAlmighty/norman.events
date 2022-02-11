@@ -240,7 +240,6 @@ export default function RequestEvent({ session, event }) {
               className="btn btn-primary mt-3"
               type="submit"
               value="Submit Request"
-              onClick={() => submitRequest()}
             />
           </div>
         </form>
