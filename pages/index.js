@@ -32,6 +32,7 @@ export default function Index({ events }) {
               key={event.eventSlug}
               title={event.title}
               time={event.time}
+              endTime={event.endTime}
               entryFee={event.entryFee}
               imgKey={event.imgKey}
               details={event.details}

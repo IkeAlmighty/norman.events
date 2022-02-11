@@ -11,6 +11,7 @@ export default function RequestEvent({ session, event }) {
 
   // TODO: once getNullOrDateTIme is working, use it to initialize
   const [time, setTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [entryFee, setEntryFee] = useState(event?.entryFee || "");
   const [imgKey, setImgKey] = useState(event?.imgKey || "");
   const [details, setDetails] = useState(event?.details || "");
@@ -48,6 +49,7 @@ export default function RequestEvent({ session, event }) {
     const eventData = {
       title,
       time: new Date(time).getTime(), // for faster querying in other parts of the app, time since epoch is stored
+      endTime: new Date(endTime).getTime(),
       entryFee: parseInt(entryFee),
       imgKey,
       details,
@@ -145,6 +147,18 @@ export default function RequestEvent({ session, event }) {
             </div>
 
             <div className="mx-1 mb-3 row">
+              <label className="col-sm px-0 py-2 w-100">End Time</label>
+
+              <input
+                required
+                className="col-sm"
+                type="datetime-local"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+              />
+            </div>
+
+            <div className="mx-1 mb-3 row">
               <label className="col-sm px-0 py-2 w-100">Entry Fee</label>
 
               <input
@@ -229,6 +243,7 @@ export default function RequestEvent({ session, event }) {
           <EventCard
             title={title}
             time={time}
+            endTime={endTime}
             entryFee={entryFee}
             imgKey={imgKey}
             details={details}
