@@ -14,3 +14,13 @@
 .btnDeny {
   background-color: rgb(255, 177, 201);
 }
+
+.controlBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: black;
+  color: whitesmoke;
+  opacity: 0.7;
+  width: 100%;
+}
