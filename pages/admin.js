@@ -105,9 +105,14 @@ export default function Admin({ session }) {
               </button>
             </div>
             <div className="col-4">
-              <button className="float-end" onClick={signOut}>
-                Sign Out
-              </button>
+              <div className="row">
+                <button className="float-end col-md" onClick={signOut}>
+                  Sign Out
+                </button>
+                <a className="mx-auto col-md text-center" href="/">
+                  Home Page
+                </a>
+              </div>
             </div>
           </div>
           <div className="row my-3">
