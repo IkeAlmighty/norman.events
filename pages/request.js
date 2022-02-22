@@ -12,6 +12,7 @@ export default function RequestEvent({ session, event }) {
   // TODO: once getNullOrDateTIme is working, use it to initialize
   const [time, setTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [showEndTime, setShowEndTime] = useState(false);
   const [entryFee, setEntryFee] = useState(event?.entryFee || "");
   const [imgKey, setImgKey] = useState(event?.imgKey || "");
   const [details, setDetails] = useState(event?.details || "");
@@ -21,6 +22,9 @@ export default function RequestEvent({ session, event }) {
   const [contactEmail, setContactEmail] = useState(event?.contactEmail || "");
   const [showContactEmail, setShowContactEmail] = useState(
     event?.showContactEmail || false
+  );
+  const [isPublicEvent, setIsPublicEvent] = useState(
+    event?.isPublicEvent || true
   );
 
   const [detailsCharCount, setDetailsCharCount] = useState(0);
@@ -49,7 +53,7 @@ export default function RequestEvent({ session, event }) {
     const eventData = {
       title,
       time: new Date(time).getTime(), // for faster querying in other parts of the app, time since epoch is stored
-      endTime: new Date(endTime).getTime(),
+      endTime: showEndTime ? new Date(endTime).getTime() : undefined, // some kind value must be passed for form validation
       entryFee: parseInt(entryFee),
       imgKey,
       details,
@@ -58,9 +62,11 @@ export default function RequestEvent({ session, event }) {
       eventSlug,
       contactEmail,
       showContactEmail,
+      isPublicEvent,
       _id: eventSlug,
     };
 
+    // FIXME: this is messy form validation, replace it with something better
     // show an error message if the eventData or details fields are not filled out
     const keys = Object.keys(eventData);
     for (let index = 0; index <= keys.length; index++) {
@@ -147,15 +153,24 @@ export default function RequestEvent({ session, event }) {
             </div>
 
             <div className="mx-1 mb-3 row">
-              <label className="col-sm px-0 py-2 w-100">End Time</label>
+              <label className="col-sm px-0 py-2 w-100">
+                <input
+                  type="checkbox"
+                  checked={showEndTime}
+                  onChange={() => setShowEndTime(!showEndTime)}
+                />
+                <label className="mx-2 px-0 py-2">Include End Time</label>
+              </label>
 
-              <input
-                required
-                className="col-sm"
-                type="datetime-local"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
+              {showEndTime && (
+                <input
+                  required
+                  className="col-sm"
+                  type="datetime-local"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
+              )}
             </div>
 
             <div className="mx-1 mb-3 row">
@@ -222,11 +237,21 @@ export default function RequestEvent({ session, event }) {
             <div className="mx-1 mb-3">
               <input
                 type="checkbox"
-                onChange={(e) => setShowContactEmail(e.target.value)}
+                checked={showContactEmail}
+                onChange={() => setShowContactEmail(!showContactEmail)}
               />
               <label className="mx-2 px-0 py-2">
                 Publicly show contact email
               </label>
+            </div>
+
+            <div className="mx-1 mb-3">
+              <input
+                type="checkbox"
+                checked={isPublicEvent}
+                onChange={() => setIsPublicEvent(!isPublicEvent)}
+              />
+              <label className="mx-2 px-0 py-2">Show event on homepage</label>
             </div>
 
             {/* image upload button */}
