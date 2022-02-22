@@ -54,7 +54,7 @@ export async function getServerSideProps(context) {
   const events = await client
     .db()
     .collection("events")
-    .find({ time: { $gt: Date.now() } })
+    .find({ time: { $gt: Date.now() }, isPublicEvent: true })
     .toArray();
 
   const sorted = events.sort(
