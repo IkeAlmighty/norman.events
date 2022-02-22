@@ -43,6 +43,12 @@ export default function EventSlug({
           questions regarding the event.
         </div>
       )}
+
+      <div className="my-3">
+        <u>
+          <a href="/">&lt; VIEW ALL EVENTS</a>
+        </u>
+      </div>
     </div>
   );
 }

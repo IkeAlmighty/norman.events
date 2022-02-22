@@ -92,30 +92,37 @@ export default function Admin({ session }) {
 
   return (
     <>
-      <div className="container">
-        <h1 className="p-3">Hi {session.user.name.split(" ")[0]} :)</h1>
-        <div className="row">
-          <div className="col-8">
-            <button
-              className="mx-3"
-              onClick={() => setToggleApproved(!toggleApproved)}
-            >
-              {toggleApproved ? "Manage Requests" : "Manage Live Events"}
-            </button>
-          </div>
-          <div className="col-4">
-            <button className="float-end" onClick={signOut}>
-              Sign Out
-            </button>
-          </div>
-        </div>
-        <div className="row my-3">
-          <div className="col-sm">
-            {!toggleApproved && (
-              <div className="px-3">
-                There are {events?.length} event requests to approve.
+      <div className={`${styles.controlBar}`}>
+        <div className="container">
+          <h1 className="p-3">Hi {session.user.name.split(" ")[0]} :)</h1>
+          <div className="row">
+            <div className="col-8">
+              <button
+                className="mx-3"
+                onClick={() => setToggleApproved(!toggleApproved)}
+              >
+                {toggleApproved ? "Manage Requests" : "Manage Live Events"}
+              </button>
+            </div>
+            <div className="col-4">
+              <div className="row">
+                <button className="float-end col-md" onClick={signOut}>
+                  Sign Out
+                </button>
+                <a className="mx-auto col-md text-center" href="/">
+                  Home Page
+                </a>
               </div>
-            )}
+            </div>
+          </div>
+          <div className="row my-3">
+            <div className="col-sm">
+              {!toggleApproved && (
+                <div className="px-3">
+                  There are {events?.length} event requests to approve.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
