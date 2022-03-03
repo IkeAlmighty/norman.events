@@ -66,16 +66,6 @@ export default function RequestEvent({ session, event }) {
       _id: eventSlug,
     };
 
-    // FIXME: this is messy form validation, replace it with something better
-    // show an error message if the eventData or details fields are not filled out
-    const keys = Object.keys(eventData);
-    for (let index = 0; index <= keys.length; index++) {
-      if (eventData[keys[index]] === "" && keys[index] !== "details") {
-        setErrorMessage("All fields except 'Details' must be filled out.");
-        return;
-      }
-    }
-
     // Edit the event if event data was provided when the page loaded:
     const eventDataExists = JSON.stringify(event) !== JSON.stringify({});
     const endpoint = eventDataExists

@@ -40,9 +40,11 @@ export default function EventCard({
           <h3>{title}</h3>
         </a>
       </div>
-      <div>
-        <S3Image imageKey={imgKey} />
-      </div>
+      {imgKey && (
+        <div>
+          <S3Image imageKey={imgKey} />
+        </div>
+      )}
       <div className={`mt-3 mx-auto`}>
         {/* FIXME: This could expose the site to Cross Site Scripting attacks */}
         {infoToggle && (

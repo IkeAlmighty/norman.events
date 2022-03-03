@@ -5,8 +5,16 @@ export default async (req, res) => {
 
   const keys = Object.keys(eventData);
   for (let index = 0; index <= keys.length; index++) {
-    if (eventData[keys[index]] === "" && keys[index] !== "details") {
-      res.status(400).end("All data except 'details' field must be filled out");
+    if (
+      eventData[keys[index]] === "" &&
+      keys[index] !== "details" &&
+      keys[index] !== "imgKey"
+    ) {
+      res
+        .status(400)
+        .end(
+          `Field labeled ${keys[index]}was not filled out. All data except 'details' field must be filled out`
+        );
       return;
     }
   }
