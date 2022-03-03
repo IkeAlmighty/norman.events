@@ -13,7 +13,7 @@ export default async (req, res) => {
       res
         .status(400)
         .end(
-          `Field labeled ${keys[index]}was not filled out. All data except 'details' field must be filled out`
+          `Field labeled ${keys[index]} was not filled out. All data except 'details' field must be filled out`
         );
       return;
     }
