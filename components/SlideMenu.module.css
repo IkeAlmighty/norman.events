@@ -1,0 +1,48 @@
+.container {
+  top: 80px;
+  height: calc(100vh - 80px);
+  position: fixed;
+  padding: 1rem;
+  display: block;
+  background-color: lightgray;
+  border-top-left-radius: 10px;
+}
+
+.visible {
+  right: 0;
+  animation-name: slidein;
+  animation-duration: 200ms;
+}
+
+.hidden {
+  right: -100vw;
+  animation-name: slideout;
+  animation-duration: 700ms;
+}
+
+@keyframes slidein {
+  from {
+    right: -100vw;
+  }
+
+  to {
+    right: 0;
+  }
+}
+
+@keyframes slideout {
+  from {
+    right: 0;
+  }
+
+  to {
+    right: -100vw;
+  }
+}
+
+.button {
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+}

@@ -1,6 +1,7 @@
 import clientPromise from "../utils/mongodb";
 
 import Head from "next/head";
+import SlideMenu from "../components/SlideMenu";
 import EventCard from "../components/EventCard";
 import styles from "../styles/index.module.css";
 
@@ -17,11 +18,16 @@ export default function Index({ events }) {
         <div className={styles.navContainer}>
           <nav className="container max-w-600px">
             <ul className="list-unstyled row">
-              <li className="text-center d-inline-block border border-dark rounded p-2 bg-light col">
-                <a href="/request">Request an Event</a>
+              <li className="text-center d-inline-block col-9 h-100">
+                <img src="/banner.jpeg" className={styles.bannerImg} />
               </li>
-              <li className="text-center d-inline-block p-2 col">
-                Norman Events
+              {/* <div className="col-3" /> */}
+              <li className="d-inline-block col-3">
+                <SlideMenu>
+                  <a href="/request" className="menu-item">
+                    &gt; Request an Event
+                  </a>
+                </SlideMenu>
               </li>
             </ul>
           </nav>
