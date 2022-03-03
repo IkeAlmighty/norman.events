@@ -19,8 +19,8 @@ export default function EventSlug({
   }
 
   return (
-    <div className="max-w-600px mx-auto my-3 px-1">
-      <h1>{title}</h1>
+    <div className="max-w-600px mx-auto my-3 px-3">
+      <h1 className="text-center">{title}</h1>
       <div className={styles.imgContainer}>
         <S3Image imageKey={imgKey} className={styles.img} />
       </div>
