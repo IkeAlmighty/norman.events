@@ -43,6 +43,6 @@
 .button {
   display: inline-block;
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   right: 10px;
 }

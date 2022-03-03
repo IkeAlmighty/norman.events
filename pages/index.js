@@ -17,19 +17,17 @@ export default function Index({ events }) {
       <main className="px-auto">
         <div className={styles.navContainer}>
           <nav className="container max-w-600px">
-            <ul className="list-unstyled row">
-              <li className="text-center d-inline-block col-9 h-100">
+            <div className="row">
+              <div className="text-center d-inline-block col-9 h-100">
                 <img src="/banner.jpeg" className={styles.bannerImg} />
-              </li>
+              </div>
               {/* <div className="col-3" /> */}
-              <li className="d-inline-block col-3">
-                <SlideMenu>
-                  <a href="/request" className="menu-item">
-                    &gt; Request an Event
-                  </a>
-                </SlideMenu>
-              </li>
-            </ul>
+            </div>
+            <SlideMenu>
+              <a href="/request" className="menu-item">
+                &gt; Request an Event
+              </a>
+            </SlideMenu>
           </nav>
         </div>
         <div className="max-w-600px mx-auto">
