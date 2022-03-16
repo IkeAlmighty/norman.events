@@ -35,7 +35,7 @@ export default function EventCard({
 
   return (
     <div className={`${styles.cardContainer} p-3 mx-auto`}>
-      <div className="mt-1 text-center">
+      <div className="mt-1 text-left text-bold">
         <a href={`/${eventSlug}`}>
           <h3>{title}</h3>
         </a>
@@ -70,7 +70,7 @@ export default function EventCard({
           <u>Go To Event Page</u>
         </a> */}
       </div>
-      <div className="mx-auto text-center">
+      <div className="mx-auto text-left">
         <div className="d-inline-block mx-3 mt-3">{prettifyDate(time)}</div>
         <div className="d-inline-block mx-3 mt-3">
           {prettifyTime(time)}

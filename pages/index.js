@@ -1,4 +1,4 @@
-import clientPromise from "../utils/mongodb";
+import { getFutureEventsSorted } from "../utils/mongoqueries";
 
 import Head from "next/head";
 import SlideMenu from "../components/SlideMenu";
@@ -53,17 +53,5 @@ export default function Index({ events }) {
 }
 
 export async function getServerSideProps(context) {
-  const client = await clientPromise;
-
-  const events = await client
-    .db()
-    .collection("events")
-    .find({ time: { $gt: Date.now() }, isPublicEvent: true })
-    .toArray();
-
-  const sorted = events.sort(
-    (previousEvent, nextEvent) => previousEvent.time - nextEvent.time
-  );
-
-  return { props: { events: sorted } };
+  return { props: { events: await getFutureEventsSorted() } };
 }

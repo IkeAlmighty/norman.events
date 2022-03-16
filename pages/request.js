@@ -12,7 +12,9 @@ export default function RequestEvent({ session, event }) {
   // TODO: once getNullOrDateTIme is working, use it to initialize
   const [time, setTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [showEndTime, setShowEndTime] = useState(false);
+  const [repeatOption, setRepeatOption] = useState(
+    event.repeatOption || "never"
+  );
   const [entryFee, setEntryFee] = useState(event?.entryFee || "");
   const [imgKey, setImgKey] = useState(event?.imgKey || "");
   const [details, setDetails] = useState(event?.details || "");
@@ -20,12 +22,22 @@ export default function RequestEvent({ session, event }) {
   const [googleMapUrl, setGoogleMapUrl] = useState(event?.googleMapUrl || "");
   const [eventSlug, setEventSlug] = useState(event?.eventSlug || "");
   const [contactEmail, setContactEmail] = useState(event?.contactEmail || "");
-  const [showContactEmail, setShowContactEmail] = useState(
-    event?.showContactEmail || false
-  );
   const [isPublicEvent, setIsPublicEvent] = useState(
     event?.isPublicEvent || true
   );
+
+  const [showContactEmail, setShowContactEmail] = useState(
+    event?.showContactEmail || false
+  );
+  const [showEndTime, setShowEndTime] = useState(endTime !== "");
+  const [showRepeatOptions, setShowRepeatOptions] = useState(
+    repeatOption !== "never"
+  );
+
+  useEffect(() => {
+    if (showRepeatOptions === false) setRepeatOption("never");
+    else if (repeatOption === "never") setRepeatOption("weekly");
+  }, [showRepeatOptions]);
 
   const [detailsCharCount, setDetailsCharCount] = useState(0);
 
@@ -54,6 +66,7 @@ export default function RequestEvent({ session, event }) {
       title,
       time: new Date(time).getTime(), // for faster querying in other parts of the app, time since epoch is stored
       endTime: showEndTime ? new Date(endTime).getTime() : undefined, // some kind value must be passed for form validation
+      repeatOption,
       entryFee: parseInt(entryFee),
       imgKey,
       details,
@@ -160,6 +173,60 @@ export default function RequestEvent({ session, event }) {
                   value={endTime}
                   onChange={(e) => setEndTime(e.target.value)}
                 />
+              )}
+            </div>
+
+            <div className="mx-1 mb-3 row">
+              <label className="col-sm px-0 py-2 w-100">
+                <input
+                  type="checkbox"
+                  checked={showRepeatOptions}
+                  onChange={() => setShowRepeatOptions(!showRepeatOptions)}
+                />
+                <label className="mx-2 px-0 py-2">
+                  {/* Maps the backend key values to readable values */}
+                  Repeat Event (
+                  {{
+                    monthly: "Monthly",
+                    everytwoweeks: "Biweekly",
+                    weekly: "Weekly",
+                  }[repeatOption] || "Never"}
+                  )
+                </label>
+              </label>
+
+              {showRepeatOptions && (
+                <div className="col-sm my-3">
+                  <label className="d-block">
+                    <input
+                      checked={repeatOption === "weekly" || false}
+                      type="radio"
+                      value="weekly"
+                      onChange={(e) => setRepeatOption(e.target.value)}
+                    />{" "}
+                    Weekly
+                  </label>
+
+                  <label className="d-block">
+                    <input
+                      checked={repeatOption === "everytwoweeks" || false}
+                      type="radio"
+                      value="everytwoweeks"
+                      onChange={(e) => setRepeatOption(e.target.value)}
+                    />{" "}
+                    Every Two Weeks
+                  </label>
+
+                  <label className="d-block">
+                    <input
+                      checked={repeatOption === "monthly" || false}
+                      type="radio"
+                      value="monthly"
+                      onChange={(e) => setRepeatOption(e.target.value)}
+                    />{" "}
+                    Every Month
+                  </label>
+                </div>
               )}
             </div>
 
