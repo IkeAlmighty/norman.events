@@ -9,7 +9,7 @@ Written using create-next-app._
 - NextJS (Backend and Frontend)
 - Atlas Mongodb (Database)
 - AWS S3 (Image Hosting)
-- Goole Places API (Location Directions)
+- Google Places API (Location Directions)
 
 You can view the live website at [norman.events](https://norman.events).
 
