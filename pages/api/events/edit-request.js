@@ -1,9 +1,9 @@
 import clientPromise from "../../../utils/mongodb";
-import { getSession } from "next-auth/react";
+import { getSession } from "../../../utils/auth";
 
 export default async (req, res) => {
   // protect this route so that only an admin can update events
-  const session = await getSession({ req });
+  const session = getSession({ req });
   if ((session.user && !session.user.isAdmin) || !session.user) {
     res.status(401).end();
     return;

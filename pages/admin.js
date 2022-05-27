@@ -1,21 +1,11 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getSession, signOut } from "next-auth/react";
+import { getSession } from "../utils/auth";
 import EventCard from "../components/EventCard";
-import clientPromise from "../utils/mongodb";
 import styles from "../styles/admin.module.css";
 
 export default function Admin({ session }) {
   const [events, setEvents] = useState();
   const [toggleApproved, setToggleApproved] = useState(false);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    if ((session && !session.user.isAdmin) || !session) {
-      router.push("/api/auth/signin");
-    }
-  }, []);
 
   useEffect(async () => {
     //FIXME: make this so that after the first time only ui changes are made, no fetches
@@ -27,10 +17,6 @@ export default function Admin({ session }) {
       setEvents(await res.json());
     }
   }, [toggleApproved]);
-
-  if ((session && !session.user.isAdmin) || !session) {
-    return <>redirecting to login</>;
-  }
 
   async function approveDraft(_id) {
     // update ui:
@@ -94,7 +80,7 @@ export default function Admin({ session }) {
     <>
       <div className={`${styles.controlBar}`}>
         <div className="container">
-          <h1 className="p-3">Hi {session.user.name.split(" ")[0]} :)</h1>
+          <h1 className="p-3">{session.user.email}</h1>
           <div className="row">
             <div className="col-8">
               <button
@@ -106,7 +92,10 @@ export default function Admin({ session }) {
             </div>
             <div className="col-4">
               <div className="row">
-                <button className="float-end col-md" onClick={signOut}>
+                <button
+                  className="float-end col-md"
+                  onClick={async () => await fetch("/api/users/signout")}
+                >
                   Sign Out
                 </button>
                 <a className="mx-auto col-md text-center" href="/">
@@ -187,8 +176,11 @@ export default function Admin({ session }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const client = await clientPromise;
+export function getServerSideProps(context) {
+  const session = getSession(context); // decrypts current jwt token and returns it as JSON
+  if (!session || !session.user || !session.user.role === "admin") {
+    return { redirect: { destination: "/login" } };
+  }
 
-  return { props: { session: await getSession(context) } };
+  return { props: { session } };
 }
