@@ -18,7 +18,7 @@ export function getSession(context) {
       const tokenJSON = jwt.verify(token, process.env.JWT_SECRET);
       if (tokenJSON.exp && parseInt(tokenJSON.exp) > Date.now()) {
         return tokenJSON;
-      } else return { tokenExpiredError: "token expired" };
+      } else return null;
     } catch (err) {
       return null;
     }

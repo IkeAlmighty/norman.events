@@ -22,8 +22,11 @@ export default async function handler(req, res) {
     .collection("users")
     .findOne(
       { username, password: sha256(password) },
-      { projection: { password: 0, id: 0 } }
+      { projection: { password: 0 } }
     );
+
+  // convert the _id field to a string so that we can serialize it in jwt:
+  user._id = user._id.toString();
 
   if (user) {
     // return json web token that expires in 15 minutes
@@ -40,7 +43,8 @@ export default async function handler(req, res) {
       `auth-token=${token}; path=/; httponly; samesite=lax;`
     );
 
-    res.status(200).end();
+    // send the user's id to client side so that the client can redirect to the correct profile page:
+    res.status(200).send(user._id);
     return;
   } else {
     // return 404, the user does not exist

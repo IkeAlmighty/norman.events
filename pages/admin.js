@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getSession } from "../utils/auth";
 import EventCard from "../components/EventCard";
 import styles from "../styles/admin.module.css";
+import SignoutButton from "../components/SignoutButton";
 
 export default function Admin({ session }) {
   const [events, setEvents] = useState();
@@ -92,12 +93,9 @@ export default function Admin({ session }) {
             </div>
             <div className="col-4">
               <div className="row">
-                <button
-                  className="float-end col-md"
-                  onClick={async () => await fetch("/api/users/signout")}
-                >
-                  Sign Out
-                </button>
+                <div className="float-left col-md">
+                  <SignoutButton />
+                </div>
                 <a className="mx-auto col-md text-center" href="/">
                   Home Page
                 </a>
