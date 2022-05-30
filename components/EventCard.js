@@ -4,16 +4,16 @@ import S3Image from "./S3Image";
 import { marked } from "marked";
 import { prettifyDate, prettifyTime } from "../utils/datetime";
 
-export default function EventCard({
-  title,
-  time,
-  endTime,
-  entryFee,
-  imgKey,
-  details,
-  googleMapUrl,
-  eventSlug,
-}) {
+export default function EventCard({ eventData }) {
+  const title = eventData.title;
+  const time = eventData.time;
+  const endTime = eventData.endTime;
+  const entryFee = eventData.entryFee;
+  const imgKey = eventData.imgKey;
+  const details = eventData.details;
+  const googleMapUrl = eventData.googleMapUrl;
+  const eventSlug = eventData.eventSlug;
+
   const [infoToggle, setInfoToggle] = useState(false);
   const [eventIsLessThanADay, setEventIsLessThanADay] = useState(true);
 
