@@ -3,8 +3,9 @@ import Script from "next/script";
 import { useEffect, useState, useRef } from "react";
 import styles from "./EventCreator.module.css";
 import S3Upload from "./S3Upload";
+import EventCard from "./EventCard";
 
-export default function EventCreator({ session }) {
+export default function EventCreator({ session, onCreate }) {
   const router = useRouter();
   if (!session) {
     router.push("/login");
@@ -20,7 +21,7 @@ export default function EventCreator({ session }) {
   const [imageKey, setImageKey] = useState();
   const [description, setDescription] = useState();
   const [address, setAddress] = useState();
-  const [showOnHomepage, setShowOnHomepage] = useState();
+  const [showOnHomepage, setShowOnHomepage] = useState(true);
   const [scoutPayment, setScoutPayment] = useState();
 
   // full document object:
@@ -34,16 +35,28 @@ export default function EventCreator({ session }) {
   const addressInputField = useRef();
 
   // functions
-  async function submitRequest() {}
+  async function submitEvent() {
+    const event = eventDocument;
 
-  function onPlacesChanged() {}
+    const apiPostEventRequest = await fetch("/api/events/upsert", {
+      method: "POST",
+      body: JSON.stringify({ event }),
+    });
+
+    if (apiPostEventRequest.status === 200) {
+      onCreate(event);
+      alert("Event Created!");
+    } else {
+      alert("Server Error.");
+    }
+  }
 
   // useEffect functions:
-  function initializeGoogleAddressSearch() {}
-
   function updateEventDocument() {
     setEventDocument({
-      startTime,
+      _id: session.user._id + title + Date.now().toString(),
+      userId: session.user._id,
+      title,
       endTime,
       repeatOption,
       entryFee,
@@ -55,7 +68,11 @@ export default function EventCreator({ session }) {
     });
   }
 
-  function initGooglePlacesApi() {
+  async function initGooglePlacesApi() {
+    //FIXME: this is jank solution to run this script after the script tag has loaded:
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // and then the main code:
     let searchBox = new google.maps.places.SearchBox(addressInputField.current);
 
     searchBox.addListener("places_changed", () => {
@@ -67,8 +84,8 @@ export default function EventCreator({ session }) {
   }
 
   // register useEffect functions:
-  useEffect(initializeGoogleAddressSearch, []);
   useEffect(updateEventDocument, [
+    title,
     startTime,
     endTime,
     repeatOption,
@@ -89,11 +106,11 @@ export default function EventCreator({ session }) {
 
   // render
   return (
-    <div>
+    <div className={styles.container}>
       {/* Load Google Places JS API: */}
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_PLACES_KEY}&libraries=places`}
-        strategy="beforeInteractive"
+        // strategy="beforeInteractive"
       />
 
       <div className="my-3">
@@ -103,14 +120,14 @@ export default function EventCreator({ session }) {
       <h1>Create an Event</h1>
 
       {/* event "form" */}
-      <div style={{ maxWidth: 480 }}>
+      <div>
         {/* scout payment */}
         <div className={styles.inputContainer}>
           <div>Select your payment for posting this event:</div>
           <select onChange={(e) => setScoutPayment(e.target.value)}>
+            <option>I don't need payment</option>
             <option>$ 2.00</option>
             <option>Photoshoot</option>
-            <option>Pasta Sauce (must live near norman)</option>
             <option>Free norman.events Event Boost</option>
           </select>
         </div>
@@ -255,7 +272,12 @@ export default function EventCreator({ session }) {
         {/* description */}
         <div className={styles.inputContainer}>
           <div>Description &#40;200 characters&#41;</div>
-          <textarea style={{ height: "200px" }} maxLength={200} />
+          <textarea
+            style={{ height: "200px" }}
+            maxLength={200}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
 
         {/* address */}
@@ -277,13 +299,21 @@ export default function EventCreator({ session }) {
             <input
               className="w-auto"
               type="checkbox"
+              defaultChecked={true}
               value={showOnHomepage}
               onChange={() => setShowOnHomepage(!showOnHomepage)}
             />
             <span className="mx-2"> Show Event on Public Feed</span>
           </label>
         </div>
+
+        <div className="text-center">
+          <button onClick={() => submitEvent()}>Create Event</button>
+        </div>
       </div>
+
+      <h2>Preview: </h2>
+      <EventCard eventData={eventDocument} />
     </div>
   );
 }

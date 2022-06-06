@@ -11,3 +11,8 @@
 .inputContainer * {
   width: 100%;
 }
+
+.container {
+  max-width: 500px;
+  margin: auto auto;
+}

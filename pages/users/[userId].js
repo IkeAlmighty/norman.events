@@ -4,13 +4,21 @@ import clientPromise from "../../utils/mongodb";
 import EventCard from "../../components/EventCard";
 import EventCreator from "../../components/EventCreator";
 
+import { useState } from "react";
+
 export default function User({ events, session }) {
+  const [_events, setEvents] = useState(events);
   return (
     <div>
       <Navigation session={session} />
-      <div className="mx-3">
-        <EventCreator session={session} />
-        {events.map((event) => {
+      <div>
+        <EventCreator
+          session={session}
+          onCreate={(event) =>
+            setEvents([..._events.filter((e) => e._id !== event._id), event])
+          }
+        />
+        {_events.map((event) => {
           return <EventCard key={event._id} eventData={event} />;
         })}
       </div>
