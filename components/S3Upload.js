@@ -15,7 +15,7 @@ export default function S3Upload({ label, onUpload, className, style }) {
         style={
           style && !className
             ? style
-            : { display: "block", margin: "auto auto", margin: "10px" }
+            : { display: "block", margin: "auto auto" }
         }
         type="button"
         value={

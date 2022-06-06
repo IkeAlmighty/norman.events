@@ -1,0 +1,13 @@
+.inputContainer {
+  margin-top: 35px;
+  margin-bottom: 35px;
+  width: 100%;
+}
+
+.inputContainer input {
+  padding: 5px;
+}
+
+.inputContainer * {
+  width: 100%;
+}
