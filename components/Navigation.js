@@ -20,6 +20,13 @@ export default function Navigation({ session }) {
                 <a className="menu-item">&gt; {session ? "Logout" : "Login"}</a>
               </Link>
             </div>
+            {session?.user._id && (
+              <div>
+                <Link href={`/users/${session.user._id}`}>
+                  <a className="menu-item">&gt; Dashboard</a>
+                </Link>
+              </div>
+            )}
             <div>
               <Link href="/">
                 <a className="menu-item">&gt; All Events</a>

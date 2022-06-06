@@ -11,7 +11,10 @@ export function getSession(context) {
   if (typeof window === "undefined") {
     // get the jwt bearer token from the request, if it exists:
     // console.log(context.req.headers);
-    const token = cookie.parse(context.req.headers.cookie)["auth-token"];
+    let token = undefined;
+    if (context.req.headers.cookie) {
+      token = cookie.parse(context.req.headers.cookie)["auth-token"];
+    }
     if (!token) return null;
 
     try {

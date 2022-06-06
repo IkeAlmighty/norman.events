@@ -30,5 +30,6 @@ export default function Index({ events, session }) {
 
 export async function getServerSideProps(context) {
   const session = getSession(context);
-  return { props: { events: await getFutureEventsSorted(), session } };
+  const events = await getFutureEventsSorted();
+  return { props: { events, session } };
 }

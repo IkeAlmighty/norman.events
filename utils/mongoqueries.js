@@ -12,6 +12,7 @@ export async function getFutureEventsSorted() {
       isPublicEvent: true,
       repeatOption: { $eq: "never" },
     })
+    .project({ _id: 0 })
     .toArray();
 
   // get all public repeating events
@@ -23,6 +24,7 @@ export async function getFutureEventsSorted() {
       isPublicEvent: true,
       repeatOption: { $ne: "never" },
     })
+    .project({ _id: 0 })
     .toArray();
 
   // for each repeating event, duplicate and add
